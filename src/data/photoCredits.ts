@@ -1,0 +1,38 @@
+// Gerado a partir de scripts/photos.json. Fotos de banco de imagens (Unsplash License / Wikimedia Commons).
+// Quando uma foto for trocada pelo painel, o crédito dela some automaticamente do rodapé.
+export interface PhotoCredit { file: string; page: string; source: 'Unsplash' | 'Wikimedia Commons'; artist?: string; license?: string }
+
+export const PHOTO_CREDITS: PhotoCredit[] = [
+  { file: "/photos/carne-bovina.webp", page: "https://unsplash.com/photos/XA4WrpqXTPE", source: 'Unsplash' },
+  { file: "/photos/frango.webp", page: "https://unsplash.com/photos/FOZbF67e-DE", source: 'Unsplash' },
+  { file: "/photos/linguica-toscana.webp", page: "https://unsplash.com/photos/7EdddHFcuzs", source: 'Unsplash' },
+  { file: "/photos/kafta.webp", page: "https://unsplash.com/photos/7nC7_1oxbJI", source: 'Unsplash' },
+  { file: "/photos/coracao.webp", page: "https://unsplash.com/photos/Gf0_aDgo8fQ", source: 'Unsplash' },
+  { file: "/photos/queijo-coalho.webp", page: "https://unsplash.com/photos/kR31WB1FjVE", source: 'Unsplash' },
+  { file: "/photos/medalhao-frango.webp", page: "https://unsplash.com/photos/Q_CRnsxSXmk", source: 'Unsplash' },
+  { file: "/photos/medalhao-carne.webp", page: "https://unsplash.com/photos/QRXhqi5Cst0", source: 'Unsplash' },
+  { file: "/photos/panceta.webp", page: "https://unsplash.com/photos/fLGAFGpqzKk", source: 'Unsplash' },
+  { file: "/photos/misto.webp", page: "https://unsplash.com/photos/gHj_m1hQM3I", source: 'Unsplash' },
+  { file: "/photos/mandioca-cozida.webp", page: "https://unsplash.com/photos/-OivIxi93EQ", source: 'Unsplash' },
+  { file: "/photos/vinagrete.webp", page: "https://unsplash.com/photos/YdVB1h2XcWE", source: 'Unsplash' },
+  { file: "/photos/pao-de-alho.webp", page: "https://unsplash.com/photos/ZibrloV_aEY", source: 'Unsplash' },
+  { file: "/photos/arroz.webp", page: "https://unsplash.com/photos/zXNC_lBBVGE", source: 'Unsplash' },
+  { file: "/photos/maionese.webp", page: "https://unsplash.com/photos/y_jQbVClNPE", source: 'Unsplash' },
+  { file: "/photos/molho-casa.webp", page: "https://unsplash.com/photos/6Zm0YZ868uU", source: 'Unsplash' },
+  { file: "/photos/batata-frita.webp", page: "https://unsplash.com/photos/qgZRZI-pKgM", source: 'Unsplash' },
+  { file: "/photos/polenta.webp", page: "https://unsplash.com/photos/rqNIBrDGnh4", source: 'Unsplash' },
+  { file: "/photos/aneis-cebola.webp", page: "https://unsplash.com/photos/CJC8sLgahjw", source: 'Unsplash' },
+  { file: "/photos/mandioca-frita.webp", page: "https://unsplash.com/photos/1cv0zRJ-_90", source: 'Unsplash' },
+  { file: "/photos/calabresa.webp", page: "https://unsplash.com/photos/KtbmX7bBR-U", source: 'Unsplash' },
+  { file: "/photos/porcao-mista.webp", page: "https://unsplash.com/photos/SQ1vUOxSIZc", source: 'Unsplash' },
+  { file: "/photos/coca-lata.webp", page: "https://unsplash.com/photos/YULrJWp8_So", source: 'Unsplash' },
+  { file: "/photos/agua.webp", page: "https://unsplash.com/photos/N-MqWXXZvNY", source: 'Unsplash' },
+  { file: "/photos/guarana-lata.webp", page: "https://commons.wikimedia.org/wiki/File:Lata_de_Guaran%C3%A1_Antarctica.jpg", source: 'Wikimedia Commons', artist: "Cabeza2000", license: "CC BY-SA 4.0" },
+  { file: "/photos/farofa.webp", page: "https://commons.wikimedia.org/wiki/File:Farofa_de_cebola.jpg", source: 'Wikimedia Commons', artist: "Melsj", license: "CC BY-SA 4.0" },
+  { file: "/photos/agua-gas.webp", page: "https://unsplash.com/photos/JhWDWwMAt_U", source: 'Unsplash' },
+  { file: "/photos/suco.webp", page: "https://unsplash.com/photos/kkrXVKK-jhg", source: 'Unsplash' },
+  { file: "/photos/refri-2l.webp", page: "https://unsplash.com/photos/aJ8CYMhemc8", source: 'Unsplash' },
+  { file: "/photos/combo-individual.webp", page: "https://unsplash.com/photos/wnnSj8DDyvk", source: 'Unsplash' },
+  { file: "/photos/combo-casal.webp", page: "https://unsplash.com/photos/tAFWFWrWGyE", source: 'Unsplash' },
+  { file: "/photos/combo-familia.webp", page: "https://unsplash.com/photos/3xujHCBSTKw", source: 'Unsplash' },
+]
