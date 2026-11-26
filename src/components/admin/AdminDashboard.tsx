@@ -36,7 +36,7 @@ export default function AdminDashboard() {
             <Wordmark compact className="text-[1.35rem]" />
             <div>
               <p className="font-display text-xl font-bold uppercase leading-none">Painel</p>
-              <p className="text-[11px] text-bege/45">{repo.kind === 'supabase' ? 'Conectado ao Supabase' : 'Modo demonstração · dados neste navegador'}</p>
+              <p className="text-[11px] text-bege/45">{repo.kind === 'supabase' ? 'Conectado ao Supabase' : repo.kind === 'api' ? 'Conectado ao servidor do site' : 'Modo demonstração · dados neste navegador'}</p>
             </div>
           </div>
           <div className="flex gap-2">

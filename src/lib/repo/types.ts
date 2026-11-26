@@ -5,7 +5,7 @@ import type { Category, MenuData, Order, OrderStatus, Product, Settings } from '
  * interface — trocar o armazenamento local pelo Supabase não muda nenhum componente.
  */
 export interface Repository {
-  readonly kind: 'local' | 'supabase'
+  readonly kind: 'local' | 'supabase' | 'api'
   loadMenu(): Promise<MenuData>
   /** Avisa quando o cardápio muda (outra aba, painel, realtime). */
   onMenuChange(cb: () => void): () => void
