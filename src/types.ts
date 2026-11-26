@@ -1,19 +1,14 @@
 export type BadgeId = 'mais-vendido' | 'novidade' | 'favorito' | 'mais-pedido' | 'economize'
 
-/** Ilustração usada quando o produto ainda não tem fotografia cadastrada. */
-export type ArtKind =
-  | 'beef' | 'chicken' | 'sausage' | 'kafta' | 'heart' | 'cheese'
-  | 'medal-chicken' | 'medal-beef' | 'pancetta' | 'mixed'
-  | 'cassava' | 'farofa' | 'vinaigrette' | 'garlic-bread' | 'rice' | 'potato-salad' | 'sauce'
-  | 'fries' | 'polenta' | 'cassava-fried' | 'onion-rings' | 'calabresa' | 'mixed-portion'
-  | 'cola' | 'guarana' | 'water' | 'sparkling' | 'juice' | 'soda2l'
-  | 'combo'
 
 /** Como a categoria é apresentada no cardápio. */
-export type CategoryLayout = 'grid' | 'compact' | 'large' | 'combo' | 'drinks'
+export type CategoryLayout = 'list' | 'grid'
 
 /** Qual conjunto de observações rápidas o modal oferece. */
-export type NotesPreset = 'espeto' | 'porcao' | 'bebida' | 'nenhum'
+export type NotesPreset = 'carne' | 'lanche' | 'porcao' | 'bebida' | 'nenhum'
+
+/** Bloco do cardápio em que a categoria aparece (como as páginas do cardápio impresso). */
+export type MenuSection = 'cardapio' | 'bebidas'
 
 export interface Category {
   id: string
@@ -23,6 +18,8 @@ export interface Category {
   accent: string
   layout: CategoryLayout
   notesPreset: NotesPreset
+  /** Página do cardápio: comidas ("cardapio") ou "bebidas". */
+  section: MenuSection
   order: number
 }
 
@@ -30,18 +27,27 @@ export interface Product {
   id: string
   categoryId: string
   name: string
-  /** Linha fina do título no carrossel (ex.: "Espetinho de"). */
+  /** Linha fina do título no carrossel de destaques (opcional). */
   titleTop: string
-  /** Linha forte do título no carrossel (ex.: "Carne Bovina"). */
+  /** Linha forte do título no carrossel de destaques. */
   titleBottom: string
+  /** Nome completo usado no carrinho e na mensagem do WhatsApp (ex.: "Prato Feito de Costela"). Vazio = usa o nome. */
+  orderName?: string
+  /** Subtítulo dentro da categoria (ex.: "Garrafa 600ml", "Long Neck"). Vazio = sem subtítulo. */
+  group?: string
+  /** Detalhe curto ao lado do nome (ex.: "500g in natura", "8 unidades"). */
+  detail?: string
+  /** Escolha obrigatória antes de adicionar (ex.: sabor do refrigerante). */
+  options?: string[]
+  /** Rótulo da escolha (ex.: "Sabor"). */
+  optionsLabel?: string
   description: string
   longDescription: string
   /** Preço em centavos. */
   price: number
   ingredients: string[]
-  /** URL ou data URL da fotografia real. Vazio = ilustração. */
+  /** URL ou data URL de uma fotografia REAL do produto. Vazio = sem foto. */
   image: string
-  art: ArtKind
   badges: BadgeId[]
   available: boolean
   /** Aparece no carrossel de destaque. */
@@ -68,14 +74,17 @@ export interface Settings {
   instagram: string
   address: string
   city: string
-  /** Taxa de entrega em centavos. */
-  deliveryFee: number
+  /** Taxa de entrega em centavos. null = "a combinar" (informada pelo WhatsApp). */
+  deliveryFee: number | null
   deliveryEstimate: string
   pickupEstimate: string
   hours: DayHours[]
-  statusOverride: 'auto' | 'open' | 'closed'
-  /** Foto opcional do espetinho do hero. Vazio = ilustração. */
+  /** 'none' = não mostrar aberto/fechado (horário ainda não cadastrado). */
+  statusOverride: 'auto' | 'open' | 'closed' | 'none'
+  /** Foto real opcional para a primeira tela. Vazio = só a marca. */
   heroImage: string
+  /** Aviso exibido em destaque (ex.: dias de almoço). */
+  notice: string
 }
 
 export interface MenuData {
@@ -124,6 +133,8 @@ export interface Order {
   items: CartItem[]
   subtotal: number
   deliveryFee: number
+  /** Taxa ainda não definida: combinar pelo WhatsApp. */
+  deliveryFeePending?: boolean
   total: number
   status: OrderStatus
 }

@@ -1,6 +1,6 @@
 import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { NOTE_PRESETS } from '@/lib/notes'
+import { presetFor } from '@/lib/notes'
 import { cn, money } from '@/lib/utils'
 import { cartCount, cartSubtotal, useCart } from '@/store/cart'
 import { useMenu } from '@/store/menu'
@@ -44,9 +44,9 @@ export function CartDrawer() {
             {items.length === 0 ? (
               <div className="grid flex-1 place-items-center p-8 text-center">
                 <div>
-                  <div className="mx-auto mb-5 h-36 w-36 opacity-60"><ProductImage art="beef" alt="" className="h-full w-full" /></div>
+                  <div className="mx-auto mb-5 grid h-24 w-24 place-items-center rounded-full border-2 border-brasa/60"><ShoppingBag className="h-10 w-10 text-brasa" /></div>
                   <p className="font-display text-2xl font-bold uppercase">Seu pedido está vazio</p>
-                  <DialogDescription className="mt-2 text-sm text-bege/55">A brasa já tá acesa. Escolha seus espetinhos!</DialogDescription>
+                  <DialogDescription className="mt-2 text-sm text-bege/55">Escolha seus pratos, porções e bebidas no cardápio.</DialogDescription>
                   <Button className="mt-6" onClick={() => { close(false); document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' }) }}>
                     <ArrowLeft /> Ver cardápio
                   </Button>
@@ -58,13 +58,15 @@ export function CartDrawer() {
                   {items.map((i) => {
                     const p = products.find((x) => x.id === i.productId)
                     const cat = categories.find((c) => c.id === i.categoryId)
-                    const presets = NOTE_PRESETS[cat?.notesPreset ?? 'espeto']
+                    const presets = presetFor(cat?.notesPreset)
                     return (
                       <li key={i.lineId} className="py-4">
                         <div className="flex gap-3">
-                          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-profundo">
-                            <ProductImage image={p?.image} art={p?.art ?? 'beef'} alt={i.name} className="h-full w-full" />
-                          </div>
+                          {p?.image && (
+                            <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-profundo">
+                              <ProductImage image={p.image} alt={i.name} className="h-full w-full" />
+                            </div>
+                          )}
                           <div className="min-w-0 flex-1">
                             <div className="flex items-start justify-between gap-2">
                               <p className="font-semibold leading-tight text-bege">{i.name}</p>
@@ -107,10 +109,10 @@ export function CartDrawer() {
                 <div className="pb-safe border-t border-white/10 bg-profundo/60 px-5 pt-4">
                   <dl className="space-y-1.5 text-sm">
                     <div className="flex justify-between text-bege/70"><dt>Subtotal</dt><dd className="tabular-nums">{money(subtotal)}</dd></div>
-                    <div className="flex justify-between text-bege/70"><dt>Taxa de entrega</dt><dd className="tabular-nums">{money(settings.deliveryFee)}</dd></div>
-                    <div className="flex justify-between pt-1 font-display text-2xl font-bold text-bege"><dt className="uppercase">Total</dt><dd className="tabular-nums">{money(subtotal + settings.deliveryFee)}</dd></div>
+                    <div className="flex justify-between text-bege/70"><dt>Taxa de entrega</dt><dd className="tabular-nums">{settings.deliveryFee === null ? 'A combinar' : money(settings.deliveryFee)}</dd></div>
+                    <div className="flex justify-between pt-1 font-display text-2xl font-bold text-bege"><dt className="uppercase">Total</dt><dd className="tabular-nums">{money(subtotal + (settings.deliveryFee ?? 0))}</dd></div>
                   </dl>
-                  <p className="mt-1 text-[11px] text-bege/40">Na retirada no local não há taxa de entrega.</p>
+                  <p className="mt-1 text-[11px] text-bege/40">{settings.deliveryFee === null ? 'A taxa de entrega é informada pelo WhatsApp. Na retirada no local não há taxa.' : 'Na retirada no local não há taxa de entrega.'}</p>
                   <Button size="lg" className="mt-4 w-full" onClick={() => setStep('checkout')}>
                     Finalizar pedido
                   </Button>

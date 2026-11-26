@@ -11,24 +11,11 @@ import { fileToDataUrl } from '@/lib/image'
 import { repo } from '@/lib/repo'
 import { cn, money, parseMoney, uid } from '@/lib/utils'
 import { sortByOrder, useMenu } from '@/store/menu'
-import type { ArtKind, BadgeId, Product } from '@/types'
-
-const ART_OPTIONS: { value: ArtKind; label: string }[] = [
-  { value: 'beef', label: 'Espeto de carne' }, { value: 'chicken', label: 'Espeto de frango' }, { value: 'sausage', label: 'Espeto de linguiça' },
-  { value: 'kafta', label: 'Kafta' }, { value: 'heart', label: 'Coração' }, { value: 'cheese', label: 'Queijo coalho' },
-  { value: 'medal-chicken', label: 'Medalhão de frango' }, { value: 'medal-beef', label: 'Medalhão de carne' }, { value: 'pancetta', label: 'Panceta' },
-  { value: 'mixed', label: 'Espeto misto' }, { value: 'garlic-bread', label: 'Pão de alho' }, { value: 'cassava', label: 'Mandioca' },
-  { value: 'farofa', label: 'Farofa' }, { value: 'vinaigrette', label: 'Vinagrete' }, { value: 'rice', label: 'Arroz' },
-  { value: 'potato-salad', label: 'Maionese' }, { value: 'sauce', label: 'Molho' }, { value: 'fries', label: 'Batata frita' },
-  { value: 'polenta', label: 'Polenta' }, { value: 'cassava-fried', label: 'Mandioca frita' }, { value: 'onion-rings', label: 'Anéis de cebola' },
-  { value: 'calabresa', label: 'Calabresa' }, { value: 'mixed-portion', label: 'Porção mista' }, { value: 'combo', label: 'Combo' },
-  { value: 'cola', label: 'Refrigerante lata (vermelha)' }, { value: 'guarana', label: 'Refrigerante lata (verde)' }, { value: 'water', label: 'Água' },
-  { value: 'sparkling', label: 'Água com gás' }, { value: 'juice', label: 'Suco' }, { value: 'soda2l', label: 'Refrigerante 2 L' },
-]
+import type { BadgeId, Product } from '@/types'
 
 const blank = (categoryId: string): Product => ({
   id: '', categoryId, name: '', titleTop: '', titleBottom: '', description: '', longDescription: '', price: 0, ingredients: [],
-  image: '', art: 'beef', badges: [], available: true, featured: false, order: 0,
+  image: '', badges: [], available: true, featured: false, order: 0,
 })
 
 export function ProductsPanel() {
@@ -82,7 +69,7 @@ export function ProductsPanel() {
           const cat = categories.find((c) => c.id === p.categoryId)
           return (
             <li key={p.id} className={cn('flex flex-wrap items-center gap-3 rounded-2xl border border-white/[0.07] bg-carvao p-3 sm:flex-nowrap', !p.available && 'opacity-60')}>
-              <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-profundo"><ProductImage image={p.image} art={p.art} alt="" className="h-full w-full" /></div>
+              <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-profundo"><ProductImage image={p.image} alt="" className="h-full w-full" /></div>
               <div className="min-w-0 flex-1">
                 <p className="truncate font-semibold">{p.name}</p>
                 <p className="text-xs text-bege/50">
@@ -154,7 +141,6 @@ function ProductEditor({ product, onClose }: { product: Product | null; onClose:
   }
   if (!p) return <Dialog open={false} />
 
-  const cat = categories.find((c) => c.id === p.categoryId)
   const set = <K extends keyof Product>(k: K, v: Product[K]) => setP((s) => (s ? { ...s, [k]: v } : s))
   const toggleBadge = (b: BadgeId) => set('badges', p.badges.includes(b) ? p.badges.filter((x) => x !== b) : [...p.badges, b])
 
@@ -187,20 +173,15 @@ function ProductEditor({ product, onClose }: { product: Product | null; onClose:
             <DialogTitle className="font-display text-3xl font-extrabold uppercase">{p.id ? 'Editar' : 'Novo'} produto</DialogTitle>
             <DialogDescription className="sr-only">Formulário do produto</DialogDescription>
             <div className="aspect-square overflow-hidden rounded-2xl bg-profundo">
-              <ProductImage image={p.image} art={p.art} alt="" className="h-full w-full" />
+              <ProductImage image={p.image} alt="" className="h-full w-full" />
             </div>
             <label className="flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-white/15 text-sm font-semibold hover:bg-white/5">
               <ImagePlus className="h-4 w-4" /> {p.image ? 'Trocar foto' : 'Enviar foto'}
               <input type="file" accept="image/*" className="sr-only" onChange={(e) => onFile(e.target.files?.[0])} />
             </label>
             <Input placeholder="…ou cole a URL da foto" value={p.image.startsWith('data:') ? '' : p.image} onChange={(e) => set('image', e.target.value)} />
-            {p.image && <button type="button" onClick={() => set('image', '')} className="w-full text-xs text-bege/50 hover:text-bege">Remover foto (usar ilustração)</button>}
-            <div>
-              <Label>Ilustração (sem foto)</Label>
-              <Select value={p.art} onChange={(e) => set('art', e.target.value as ArtKind)}>
-                {ART_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-              </Select>
-            </div>
+            {p.image && <button type="button" onClick={() => set('image', '')} className="w-full text-xs text-bege/50 hover:text-bege">Remover foto</button>}
+            <p className="text-xs text-bege/45">Use apenas fotos reais do produto. Sem foto, o item aparece só com nome e preço, como no cardápio impresso.</p>
           </div>
 
           <div className="space-y-4 p-5 sm:max-h-[80vh] sm:overflow-y-auto">
@@ -215,13 +196,18 @@ function ProductEditor({ product, onClose }: { product: Product | null; onClose:
               </Select>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div><Label>Título no carrossel · linha fina</Label><Input value={p.titleTop} onChange={(e) => set('titleTop', e.target.value)} placeholder="Espetinho de" /></div>
-              <div><Label>Título no carrossel · linha forte</Label><Input value={p.titleBottom} onChange={(e) => set('titleBottom', e.target.value)} placeholder="Carne Bovina" /></div>
+              <div><Label>Subtítulo na categoria</Label><Input value={p.group ?? ''} onChange={(e) => set('group', e.target.value)} placeholder="Ex.: Long Neck" /></div>
+              <div><Label>Detalhe (gramatura, unidades)</Label><Input value={p.detail ?? ''} onChange={(e) => set('detail', e.target.value)} placeholder="Ex.: 500g in natura" /></div>
+              <div className="sm:col-span-2"><Label>Nome no pedido (WhatsApp)</Label><Input value={p.orderName ?? ''} onChange={(e) => set('orderName', e.target.value)} placeholder={`Vazio = "${p.name || 'nome do produto'}"`} /></div>
+              <div><Label>Escolha obrigatória · rótulo</Label><Input value={p.optionsLabel ?? ''} onChange={(e) => set('optionsLabel', e.target.value)} placeholder="Ex.: Sabor" /></div>
+              <div><Label>Opções (separe por vírgula)</Label><Input value={(p.options ?? []).join(', ')} onChange={(e) => set('options', e.target.value.split(',').map((x) => x.trim()).filter(Boolean))} placeholder="Ex.: Coca-Cola, Guaraná" /></div>
+              <div><Label>Título no carrossel · linha fina</Label><Input value={p.titleTop} onChange={(e) => set('titleTop', e.target.value)} /></div>
+              <div><Label>Título no carrossel · linha forte</Label><Input value={p.titleBottom} onChange={(e) => set('titleBottom', e.target.value)} /></div>
             </div>
             <div><Label>Descrição curta</Label><Textarea value={p.description} onChange={(e) => set('description', e.target.value)} maxLength={160} /></div>
             <div><Label>Descrição completa</Label><Textarea value={p.longDescription} onChange={(e) => set('longDescription', e.target.value)} className="min-h-[110px]" /></div>
             <div><Label>Ingredientes / composição (separe por vírgula)</Label><Input value={p.ingredients.join(', ')} onChange={(e) => set('ingredients', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))} /></div>
-            {(cat?.layout === 'combo' || p.comboItems) && (
+            {p.comboItems && (
               <div><Label>Itens do combo (um por linha)</Label><Textarea value={(p.comboItems ?? []).join('\n')} onChange={(e) => set('comboItems', e.target.value.split('\n'))} onBlur={() => set('comboItems', (p.comboItems ?? []).map((s) => s.trim()).filter(Boolean))} /></div>
             )}
             <div>
@@ -234,7 +220,7 @@ function ProductEditor({ product, onClose }: { product: Product | null; onClose:
             </div>
             <div className="flex flex-wrap gap-6">
               <label className="flex items-center gap-3 text-sm"><Switch checked={p.available} onCheckedChange={(v) => set('available', v)} /> Disponível</label>
-              <label className="flex items-center gap-3 text-sm"><Switch checked={p.featured} onCheckedChange={(v) => set('featured', v)} /> Destaque no carrossel</label>
+              <label className="flex items-center gap-3 text-sm"><Switch checked={p.featured} onCheckedChange={(v) => set('featured', v)} /> Destaque no carrossel (precisa de foto)</label>
             </div>
             {error && <p className="text-sm text-[#ff9a80]" role="alert">{error}</p>}
             <div className="flex justify-end gap-2 pt-2">

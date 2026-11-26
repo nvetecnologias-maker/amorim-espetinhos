@@ -1,6 +1,6 @@
 import { ArrowLeft, ClipboardList, Cog, Layers, Lock, LogOut, UtensilsCrossed } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Logo } from '@/components/Logo'
+import { Wordmark } from '@/components/Logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -21,8 +21,8 @@ export default function AdminDashboard() {
   const [authed, setAuthed] = useState<boolean | null>(null)
   useEffect(() => {
     repo.getSession().then(setAuthed)
-    document.title = 'Painel — Amorim Espetinhos'
-    return () => { document.title = 'Amorim Espetinhos — Cardápio Digital' }
+    document.title = 'Painel — Ponto da Costela'
+    return () => { document.title = 'Ponto da Costela — Cardápio' }
   }, [])
 
   if (authed === null) return null
@@ -33,7 +33,7 @@ export default function AdminDashboard() {
       <header className="sticky top-0 z-30 border-b border-white/5 bg-profundo/90 backdrop-blur-xl">
         <div className="container flex h-16 items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <Logo className="h-10 w-auto" />
+            <Wordmark compact className="text-[1.35rem]" />
             <div>
               <p className="font-display text-xl font-bold uppercase leading-none">Painel</p>
               <p className="text-[11px] text-bege/45">{repo.kind === 'supabase' ? 'Conectado ao Supabase' : 'Modo demonstração · dados neste navegador'}</p>
@@ -79,7 +79,7 @@ function Login({ onDone }: { onDone: () => void }) {
       <div className="pointer-events-none absolute h-[70vmin] w-[70vmin] ember-glow" aria-hidden />
       <form onSubmit={submit} className="relative w-full max-w-sm rounded-[28px] border border-white/10 bg-carvao/90 p-7 shadow-deep backdrop-blur">
         <div className="mb-6 flex flex-col items-center text-center">
-          <Logo className="h-20 w-auto" />
+          <Wordmark className="text-5xl" />
           <h1 className="mt-4 flex items-center gap-2 font-display text-3xl font-extrabold uppercase"><Lock className="h-5 w-5 text-brasa" /> Área do proprietário</h1>
         </div>
         {repo.loginMode === 'email' && (

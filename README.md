@@ -1,9 +1,10 @@
-# Amorim Espetinhos — Cardápio Digital
+# Ponto da Costela — Cardápio Digital
 
-Cardápio digital da espetaria: hero com o espetinho em destaque, carrossel orbital de espetinhos,
-cardápio por categorias, carrinho, checkout com envio pelo WhatsApp e painel do proprietário.
+Cardápio digital do Ponto da Costela, no visual das artes oficiais do cardápio (fundo preto, laranja intenso,
+tipografia branca, linhas finas laranja): cardápio por categorias, carrinho, escolha de sabor, observações,
+checkout com envio pelo WhatsApp e painel do proprietário.
 
-**Stack:** React 19 · TypeScript · Vite · Tailwind CSS · componentes no padrão shadcn/ui (Radix) · GSAP + ScrollTrigger · Lucide · Supabase (opcional).
+**Stack:** React 19 · TypeScript · Vite · Tailwind CSS · componentes no padrão shadcn/ui (Radix) · GSAP · Lucide · Supabase (opcional).
 
 ## Rodar
 
@@ -16,29 +17,47 @@ npm run build      # gera dist/
 - Cardápio: `/`
 - Painel do proprietário: `/#/admin` (link "Área do proprietário" no rodapé)
 
-## Antes de publicar — checklist
+## O que veio das artes oficiais
 
-1. **Logo oficial:** já incluída em `public/brand/logo.png` (arquivo original, apenas recortado no círculo; o original intacto está em
-   `public/brand/logo-original.jpeg`). Também é o favicon (`favicon-64.png`, `apple-touch-icon.png`).
-2. **Fotos:** todos os produtos já têm fotos reais em `public/photos/` (banco de imagens: Unsplash e Wikimedia Commons;
-   fontes em `scripts/photos.json`, créditos no rodapé em "Créditos das fotos"). São fotos ilustrativas, não dos pratos da casa:
-   o ideal é trocar pelas fotos próprias no painel (Produtos → editar → Enviar foto; hero em Configurações).
-   Ao trocar, o crédito daquela foto sai sozinho do rodapé. As duas fotos do Wikimedia (lata de guaraná e farofa) são CC BY-SA 4.0
-   e exigem o crédito enquanto estiverem em uso.
-3. **Dados de contato:** WhatsApp que recebe os pedidos, telefone, endereço, Instagram, taxa de entrega e horários
-   estão com valores demonstrativos — altere em Configurações.
-4. **Supabase** (necessário para receber pedidos de clientes no painel e para o login seguro) — veja abaixo.
+- **Produtos e preços:** todos os 59 itens das páginas "Cardápio" e "Bebidas", com as descrições e gramaturas
+  das artes (`src/data/seed.ts`).
+- **Marca:** o letreiro "★ PONTO DA ★ / COSTELA" entre linhas duplas laranja, recriado em código
+  (`src/components/Logo.tsx`, fonte Russo One). Se houver a logo em arquivo, coloque em `public/brand/logo.png`
+  e ajuste `BRAND_LOGO_SRC` em `src/lib/brand.ts`.
+- **Contato:** delivery (44) 92001-1031 (é o número do QR Code de WhatsApp da arte) e Instagram @pontoda.costela0.
+- **Aviso:** "Servimos almoço aos sábados, domingos e feriados".
 
-## Dados: modo demonstração × Supabase
+## Pendente (editar em Painel → Configurações)
 
-| | Sem variáveis (demonstração) | Com Supabase |
+| Dado | Situação |
+|---|---|
+| Endereço e cidade | Não informado nas artes — fica oculto até ser preenchido |
+| Horário de funcionamento | Não informado — selo "Aberto/Fechado" fica oculto (status "Não mostrar") |
+| Taxa de entrega | Não informada — aparece "a combinar" no carrinho e no WhatsApp |
+| Tempo de entrega/retirada | Não informado — oculto |
+| Fotos dos produtos | Nenhuma: o cardápio é só texto, como o impresso. Envie fotos REAIS pelo painel se quiser |
+
+## Recursos do cardápio
+
+- Navegação por categorias (fixa no topo) e páginas "Cardápio" e "Bebidas" em duas colunas no computador.
+- Subtítulos dentro da categoria (Garrafa 600ml, Lata 350ml, Chopp, Long Neck, Combinho).
+- **Escolha obrigatória** (ex.: sabor do refrigerante, refri do combinho): o botão + abre a escolha antes de adicionar.
+- **Nome no pedido**: itens com o mesmo nome no cardápio ("Costela") vão para o WhatsApp com nome completo
+  ("Prato Feito de Costela", "Costela Assada", "Escondidinho de Costela"…).
+- Observações rápidas por tipo (carne, lanche, porção, bebida) e observação livre.
+- Carrinho com quantidades, checkout (entrega ou retirada, Pix/dinheiro/cartão, troco) e mensagem pronta no WhatsApp.
+- Carrossel de destaques: aparece só para produtos marcados como destaque **e** com foto real.
+
+## Dados: modo local × Supabase
+
+| | Sem variáveis (local) | Com Supabase |
 |---|---|---|
 | Cardápio | Salvo no navegador | Banco Postgres, leitura pública |
 | Painel | PIN (`VITE_ADMIN_PIN`, padrão `1234`) — **não é segurança real** | Login e-mail/senha + RLS |
 | Pedidos no painel | Só os feitos no mesmo navegador | Todos, em tempo real |
 | Alterações → cardápio | Na hora, entre abas do mesmo navegador | Na hora, para todos (Realtime) |
 
-Em qualquer modo, o pedido sempre é enviado ao WhatsApp da espetaria com a mensagem completa.
+Em qualquer modo, o pedido sempre é enviado ao WhatsApp do Ponto da Costela com a mensagem completa.
 
 ### Configurar o Supabase
 
@@ -46,10 +65,7 @@ Em qualquer modo, o pedido sempre é enviado ao WhatsApp da espetaria com a mens
 2. Crie o usuário do proprietário em *Authentication → Users* e rode
    `insert into public.admins (user_id) values ('<uuid do usuário>');`
 3. Copie `.env.example` para `.env` e preencha `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`.
-4. Entre no painel e use **Configurações → Restaurar demonstração** para popular o banco com o cardápio inicial (ou cadastre do zero).
-
-Fotos enviadas pelo painel são reduzidas (máx. 1200 px, JPEG) e guardadas junto ao produto. Para catálogos grandes,
-vale migrar para o Supabase Storage.
+4. Entre no painel e use **Configurações → Restaurar cardápio original** para popular o banco.
 
 ## Estrutura
 
@@ -58,23 +74,13 @@ src/
   components/
     Header.tsx  Hero.tsx  Highlights.tsx  MenuSections.tsx  CategoryNavigation.tsx
     ProductCard.tsx  ProductModal.tsx  CartDrawer.tsx  Checkout.tsx  Footer.tsx
-    MobileCartBar.tsx  Logo.tsx  ProductImage.tsx  art/FoodArt.tsx
-    ui/dish-orbit-carousel.tsx   ← carrossel orbital (genérico e reutilizável)
-    ui/*                          ← button, dialog, input, tabs, switch, badge (padrão shadcn)
-    admin/AdminDashboard.tsx  OrdersPanel  ProductsPanel  CategoriesPanel  SettingsPanel
-  data/seed.ts        ← cardápio demonstrativo (produtos, preços, categorias, horários)
+    MobileCartBar.tsx  Logo.tsx (letreiro)  ProductImage.tsx
+    ui/*  admin/*
+  data/seed.ts        ← cardápio do Ponto da Costela (produtos, preços, categorias, contato)
   lib/repo/           ← camada de dados: local.ts e supabase.ts com a mesma interface
   lib/whatsapp.ts     ← mensagem formatada do pedido
   store/              ← carrinho (persistido), cardápio, toasts
 supabase/schema.sql
 ```
-
-## Carrossel orbital (`ui/dish-orbit-carousel.tsx`)
-
-Adaptação do Dish Orbit Carousel: a imagem gira em órbita em torno de um eixo à esquerda (sai pelo topo, a próxima
-entra por baixo), título em duas linhas com pesos diferentes, cor de destaque por categoria, setas, miniaturas,
-gesto de deslizar, teclado (← →) e indicador de posição. Chef e avaliações foram removidos (sem dados reais);
-"likes" viraram favoritos do próprio cliente salvos no aparelho; "order" adiciona ao carrinho. Os espetinhos que
-aparecem nele são os marcados com ★ no painel.
 
 Todas as animações respeitam `prefers-reduced-motion`.

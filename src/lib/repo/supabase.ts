@@ -43,7 +43,7 @@ export function createSupabaseRepository(url: string, anonKey: string): Reposito
       const categories = (cats.data as Row<Category>[]).map((r) => ({ ...r.data, id: r.id }))
       const products = (prods.data as Row<Product>[]).map((r) => ({ ...r.data, id: r.id, order: r.position ?? r.data.order }))
       const settings = { ...seedMenu.settings, ...((sets.data as Row<Settings> | null)?.data ?? {}) }
-      // Banco vazio: mostra o cardápio demonstrativo até o dono cadastrar.
+      // Banco vazio: mostra o cardápio original (seed) até o dono cadastrar.
       if (!categories.length && !products.length) return structuredClone({ ...seedMenu, settings })
       return { categories, products, settings }
     },

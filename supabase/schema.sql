@@ -1,4 +1,4 @@
--- Amorim Espetinhos — esquema Supabase
+-- Ponto da Costela — esquema Supabase
 -- Execute no SQL Editor do projeto. Depois crie o usuário do proprietário em
 -- Authentication > Users e copie o UUID dele para a tabela admins abaixo.
 

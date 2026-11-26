@@ -8,16 +8,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-gradient-to-r from-queimado to-brasa text-white shadow-ember hover:brightness-110 hover:-translate-y-0.5',
-        outline: 'border border-white/20 bg-white/5 text-bege backdrop-blur hover:bg-white/10 hover:border-white/40',
+        default: 'bg-brasa font-extrabold text-black hover:bg-[#ff8a33] hover:-translate-y-0.5',
+        outline: 'border-2 border-white/80 bg-transparent font-bold text-white hover:border-brasa hover:text-brasa',
         ghost: 'text-bege hover:bg-white/10',
         light: 'bg-bege text-profundo hover:bg-white',
-        destructive: 'bg-queimado/15 text-[#ff8a70] hover:bg-queimado/30',
+        destructive: 'bg-red-500/15 text-red-300 hover:bg-red-500/25',
       },
       size: {
         default: 'h-11 px-5 text-sm',
         sm: 'h-9 px-4 text-xs',
-        lg: 'h-14 px-8 text-sm tracking-[0.14em] uppercase',
+        lg: 'h-14 px-8 text-sm tracking-[0.1em] uppercase',
         icon: 'h-11 w-11',
       },
     },

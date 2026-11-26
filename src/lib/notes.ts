@@ -1,13 +1,17 @@
 import type { NotesPreset } from '@/types'
 
 export const NOTE_PRESETS: Record<NotesPreset, string[]> = {
-  espeto: ['Sem cebola', 'Bem passado', 'Ao ponto', 'Pouco tempero'],
-  porcao: ['Sem cebola', 'Pouco sal', 'Molho à parte'],
+  carne: ['Bem passada', 'Ao ponto', 'Pouco sal'],
+  lanche: ['Sem molho especial', 'Molho à parte', 'Sem mussarela'],
+  porcao: ['Pouco sal', 'Bem sequinha'],
   bebida: ['Bem gelada', 'Com gelo e limão'],
   nenhum: [],
 }
 /** Opções que se excluem (ponto da carne). */
-export const EXCLUSIVE = [['Bem passado', 'Ao ponto']]
+export const EXCLUSIVE = [['Bem passada', 'Ao ponto'], ['Sem molho especial', 'Molho à parte']]
+
+/** Presets antigos/desconhecidos caem em "nenhum". */
+export const presetFor = (id: string | undefined): string[] => NOTE_PRESETS[(id ?? 'nenhum') as NotesPreset] ?? []
 
 export function toggleNote(list: string[], note: string) {
   if (list.includes(note)) return list.filter((n) => n !== note)
