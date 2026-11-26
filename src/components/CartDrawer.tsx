@@ -44,7 +44,7 @@ export function CartDrawer() {
             {items.length === 0 ? (
               <div className="grid flex-1 place-items-center p-8 text-center">
                 <div>
-                  <div className="mx-auto mb-5 grid h-24 w-24 place-items-center rounded-full border-2 border-brasa/60"><ShoppingBag className="h-10 w-10 text-brasa" /></div>
+                  <div className="mx-auto mb-5 h-36 w-36 opacity-80"><ProductImage categoryId="assados" alt="" className="h-full w-full" /></div>
                   <p className="font-display text-2xl font-bold uppercase">Seu pedido está vazio</p>
                   <DialogDescription className="mt-2 text-sm text-bege/55">Escolha seus pratos, porções e bebidas no cardápio.</DialogDescription>
                   <Button className="mt-6" onClick={() => { close(false); document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' }) }}>
@@ -62,11 +62,9 @@ export function CartDrawer() {
                     return (
                       <li key={i.lineId} className="py-4">
                         <div className="flex gap-3">
-                          {p?.image && (
-                            <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-profundo">
-                              <ProductImage image={p.image} alt={i.name} className="h-full w-full" />
-                            </div>
-                          )}
+                          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-profundo">
+                            <ProductImage image={p?.image} categoryId={i.categoryId} alt={i.name} className="h-full w-full" />
+                          </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-start justify-between gap-2">
                               <p className="font-semibold leading-tight text-bege">{i.name}</p>

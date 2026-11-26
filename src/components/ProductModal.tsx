@@ -9,6 +9,7 @@ import { ProductBadge } from './ui/badge'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from './ui/dialog'
 import { Textarea } from './ui/input'
+import { ProductImage } from './ProductImage'
 
 export function ProductModal({ product, onClose }: { product: Product | null; onClose: () => void }) {
   const category = useMenu((s) => s.categories.find((c) => c.id === product?.categoryId))
@@ -37,35 +38,33 @@ export function ProductModal({ product, onClose }: { product: Product | null; on
 
   return (
     <Dialog open={!!product} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className={cn('p-0 sm:max-h-[90vh] sm:overflow-hidden', product?.image ? '' : 'sm:max-w-lg')}>
+      <DialogContent className="p-0 sm:max-h-[90vh] sm:overflow-hidden">
         {product && (
-          <div className={cn('grid grid-cols-[minmax(0,1fr)]', product.image && 'sm:grid-cols-2')}>
-            {product.image && (
-              <div className="relative aspect-[4/3] overflow-hidden bg-black sm:aspect-auto sm:h-full sm:min-h-[480px]">
-                <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
-              </div>
-            )}
+          <div className="grid grid-cols-[minmax(0,1fr)] sm:grid-cols-2">
+            <div className="relative aspect-[16/10] overflow-hidden bg-profundo sm:aspect-auto sm:h-full sm:min-h-[520px]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(244,122,32,.3),transparent_60%)]" />
+              <ProductImage image={product.image} categoryId={product.categoryId} alt={product.name} eager className="h-full w-full" />
+              <div className="absolute left-4 top-4 flex flex-wrap gap-1.5">{product.badges.map((b) => <ProductBadge key={b} id={b} />)}</div>
+            </div>
 
             <div className="flex min-w-0 flex-col sm:max-h-[90vh] sm:overflow-y-auto">
               <div className="flex-1 p-6 sm:p-8">
-                <span className="text-sm font-extrabold text-brasa">{category?.name}{product.group ? ` · ${product.group}` : ''}</span>
-                <DialogTitle className="mt-1 pr-10 text-3xl font-extrabold leading-tight text-white sm:text-4xl">{product.name}</DialogTitle>
-                {product.detail && <p className="mt-1 text-sm font-bold text-white/70">({product.detail})</p>}
-                <div className="mt-4 h-px bg-brasa/70" aria-hidden />
+                <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-brasa">{category?.name}{product.group ? ` · ${product.group}` : ''}</span>
+                <DialogTitle className="mt-2 pr-10 font-display text-4xl font-extrabold uppercase leading-[0.9] tracking-tight text-bege sm:text-5xl">{product.name}</DialogTitle>
+                {product.detail && <p className="mt-2 text-xs font-semibold uppercase tracking-[0.1em] text-brasa/90">{product.detail}</p>}
                 <DialogDescription className={cn('mt-4 text-[15px] font-semibold leading-relaxed text-white/75', !(product.longDescription || product.description) && 'sr-only')}>
                   {product.longDescription || product.description || product.name}
                 </DialogDescription>
-                {product.badges.length > 0 && <div className="mt-3 flex flex-wrap gap-1.5">{product.badges.map((b) => <ProductBadge key={b} id={b} />)}</div>}
-
+                
                 {product.comboItems && product.comboItems.length > 0 && (
                   <ul className="mt-5 space-y-2">
                     {product.comboItems.map((i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-white/85"><Check className="h-4 w-4 text-brasa" /> {i}</li>
+                      <li key={i} className="flex items-center gap-2 text-sm text-bege/85"><Check className="h-4 w-4 text-brasa" /> {i}</li>
                     ))}
                   </ul>
                 )}
 
-                <p className="mt-5 text-4xl font-extrabold text-white">{money(product.price)}</p>
+                <p className="mt-6 font-display text-4xl font-bold text-bege">{money(product.price)}</p>
 
                 {options.length > 1 && (
                   <fieldset className="mt-6">

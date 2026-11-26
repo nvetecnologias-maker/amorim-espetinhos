@@ -6,17 +6,17 @@ import type { Category, MenuData, Product, Settings } from '@/types'
  * exatamente os das artes. Tudo é editável no painel (#/admin).
  */
 export const seedCategories: Category[] = [
-  { id: 'prato-feito', name: 'Prato Feito', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'carne', section: 'cardapio', order: 1 },
-  { id: 'porcoes', name: 'Porções', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'porcao', section: 'cardapio', order: 2 },
-  { id: 'combos', name: 'Combos', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'carne', section: 'cardapio', order: 3 },
-  { id: 'assados', name: 'Assados', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'carne', section: 'cardapio', order: 4 },
-  { id: 'escondidinho', name: 'Escondidinho', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'nenhum', section: 'cardapio', order: 5 },
-  { id: 'lanches', name: 'Lanches', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'lanche', section: 'cardapio', order: 6 },
-  { id: 'sanduiches', name: 'Sanduíches', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'lanche', section: 'cardapio', order: 7 },
-  { id: 'acompanhamentos', name: 'Acompanhamentos', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'nenhum', section: 'cardapio', order: 8 },
-  { id: 'cervejas', name: 'Cervejas', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'bebida', section: 'bebidas', order: 9 },
-  { id: 'refrigerantes', name: 'Refrigerantes', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'bebida', section: 'bebidas', order: 10 },
-  { id: 'diversos', name: 'Diversos', tagline: '', accent: '#F47A20', layout: 'list', notesPreset: 'bebida', section: 'bebidas', order: 11 },
+  { id: 'prato-feito', name: 'Prato Feito', tagline: 'Prato completo com arroz e acompanhamentos.', accent: '#F47A20', layout: 'grid', notesPreset: 'carne', section: 'cardapio', order: 1 },
+  { id: 'porcoes', name: 'Porções', tagline: 'Pra dividir na mesa (ou não).', accent: '#F47A20', layout: 'grid', notesPreset: 'porcao', section: 'cardapio', order: 2 },
+  { id: 'combos', name: 'Combos', tagline: 'A costela com tudo que ela merece.', accent: '#F47A20', layout: 'combo', notesPreset: 'carne', section: 'cardapio', order: 3 },
+  { id: 'assados', name: 'Assados', tagline: 'Costela, contra filé e picanha.', accent: '#F47A20', layout: 'large', notesPreset: 'carne', section: 'cardapio', order: 4 },
+  { id: 'escondidinho', name: 'Escondidinho', tagline: 'Escondidinho de costela.', accent: '#F47A20', layout: 'grid', notesPreset: 'nenhum', section: 'cardapio', order: 5 },
+  { id: 'lanches', name: 'Lanches', tagline: 'Com hambúrguer de costela.', accent: '#F47A20', layout: 'grid', notesPreset: 'lanche', section: 'cardapio', order: 6 },
+  { id: 'sanduiches', name: 'Sanduíches', tagline: 'Costela desfiada no pão.', accent: '#F47A20', layout: 'grid', notesPreset: 'lanche', section: 'cardapio', order: 7 },
+  { id: 'acompanhamentos', name: 'Acompanhamentos', tagline: 'Pra completar o prato.', accent: '#F47A20', layout: 'compact', notesPreset: 'nenhum', section: 'cardapio', order: 8 },
+  { id: 'cervejas', name: 'Cervejas', tagline: 'Garrafa, lata, chopp e long neck.', accent: '#F47A20', layout: 'drinks', notesPreset: 'bebida', section: 'bebidas', order: 9 },
+  { id: 'refrigerantes', name: 'Refrigerantes', tagline: 'Gelado pra acompanhar.', accent: '#F47A20', layout: 'drinks', notesPreset: 'bebida', section: 'bebidas', order: 10 },
+  { id: 'diversos', name: 'Diversos', tagline: 'Energéticos, sucos, caipirinha e mais.', accent: '#F47A20', layout: 'drinks', notesPreset: 'bebida', section: 'bebidas', order: 11 },
 ]
 
 const REFRI_LATA = ['Coca-Cola', 'Guaraná', 'Fanta', 'Sprite', 'Pepsi', 'Soda']
@@ -39,41 +39,41 @@ const p = (x: Input): Product => ({
 
 export const seedProducts: Product[] = [
   // ——— Prato Feito ———
-  p({ id: 'pf-costela', categoryId: 'prato-feito', name: 'Costela', orderName: 'Prato Feito de Costela', price: 2990, description: 'Arroz, farofa, vinagrete, mandioca e costela.' }),
+  p({ id: 'pf-costela', featured: true, categoryId: 'prato-feito', name: 'Costela', orderName: 'Prato Feito de Costela', price: 2990, description: 'Arroz, farofa, vinagrete, mandioca e costela.' }),
   p({ id: 'pf-frango-parmegiana', categoryId: 'prato-feito', name: 'Frango à Parmegiana', orderName: 'Prato Feito Frango à Parmegiana', price: 2490, description: 'Arroz, frango à parmegiana e batata frita.' }),
   p({ id: 'pf-bife-parmegiana', categoryId: 'prato-feito', name: 'Bife à Parmegiana', orderName: 'Prato Feito Bife à Parmegiana', price: 2990, description: 'Arroz, bife à parmegiana e batata frita.' }),
 
   // ——— Porções ———
   p({ id: 'batata-frita', categoryId: 'porcoes', name: 'Batata Frita', orderName: 'Porção de Batata Frita', detail: '500g in natura', price: 2490 }),
-  p({ id: 'batata-catupiry-costela', categoryId: 'porcoes', name: 'Batata Frita com Catupiry e Costela', orderName: 'Porção de Batata Frita com Catupiry e Costela', price: 3990 }),
-  p({ id: 'bolinho-costela', categoryId: 'porcoes', name: 'Bolinho de Costela', orderName: 'Porção de Bolinho de Costela', detail: '8 unidades', price: 3990 }),
+  p({ id: 'batata-catupiry-costela', featured: true, categoryId: 'porcoes', name: 'Batata Frita com Catupiry e Costela', orderName: 'Porção de Batata Frita com Catupiry e Costela', price: 3990 }),
+  p({ id: 'bolinho-costela', featured: true, categoryId: 'porcoes', name: 'Bolinho de Costela', orderName: 'Porção de Bolinho de Costela', detail: '8 unidades', price: 3990 }),
   p({ id: 'aneis-cebola', categoryId: 'porcoes', name: 'Anéis de Cebola', orderName: 'Porção de Anéis de Cebola', detail: '250g in natura', price: 1990 }),
   p({ id: 'dadinho-tapioca', categoryId: 'porcoes', name: 'Dadinho de Tapioca', orderName: 'Porção de Dadinho de Tapioca', detail: '15 unidades', price: 1990 }),
   p({ id: 'ovo-codorna', categoryId: 'porcoes', name: 'Ovo de Codorna', orderName: 'Porção de Ovo de Codorna', detail: '200g', price: 1990 }),
   p({ id: 'azeitona', categoryId: 'porcoes', name: 'Azeitona', orderName: 'Porção de Azeitona', detail: '150g', price: 1490 }),
 
   // ——— Combos ———
-  p({ id: 'combo-costela', categoryId: 'combos', name: 'Combo Costela', price: 10990, description: 'Arroz, farofa, vinagrete, mandioca e costela.' }),
-  p({ id: 'combo-costela-meio', categoryId: 'combos', name: 'Combo Costela (meio)', price: 8790, description: 'Arroz, farofa, vinagrete, mandioca e costela.' }),
-  p({ id: 'combo-contra-file', categoryId: 'combos', name: 'Combo Contra Filé', price: 10990, description: 'Arroz, farofa, vinagrete, mandioca e contra filé.' }),
-  p({ id: 'combo-picanha', categoryId: 'combos', name: 'Combo Picanha', price: 12190, description: 'Arroz, farofa, vinagrete, mandioca e picanha.' }),
-  p({ id: 'combinho-x-costela', categoryId: 'combos', group: 'Combinho', name: 'X-Costela + Batata Frita + Refri Lata', orderName: 'Combinho X-Costela + Batata Frita + Refri Lata', price: 2990, options: REFRI_LATA, optionsLabel: 'Refri lata' }),
-  p({ id: 'combinho-x-costela-bacon', categoryId: 'combos', group: 'Combinho', name: 'X-Costela com Bacon + Batata Frita + Refri Lata', orderName: 'Combinho X-Costela com Bacon + Batata Frita + Refri Lata', price: 3490, options: REFRI_LATA, optionsLabel: 'Refri lata' }),
-  p({ id: 'combinho-x-costela-salada', categoryId: 'combos', group: 'Combinho', name: 'X-Costela Salada + Batata Frita + Refri Lata', orderName: 'Combinho X-Costela Salada + Batata Frita + Refri Lata', price: 3490, options: REFRI_LATA, optionsLabel: 'Refri lata' }),
-  p({ id: 'combinho-sanduiche-costela', categoryId: 'combos', group: 'Combinho', name: 'Sanduíche de Costela + Batata Frita + Refri Lata', orderName: 'Combinho Sanduíche de Costela + Batata Frita + Refri Lata', price: 3490, options: REFRI_LATA, optionsLabel: 'Refri lata' }),
+  p({ id: 'combo-costela', categoryId: 'combos', name: 'Combo Costela', price: 10990, featured: true, description: 'Arroz, farofa, vinagrete, mandioca e costela.', comboItems: ['Costela', 'Arroz', 'Farofa', 'Vinagrete', 'Mandioca'] }),
+  p({ id: 'combo-costela-meio', categoryId: 'combos', name: 'Combo Costela (meio)', price: 8790, description: 'Arroz, farofa, vinagrete, mandioca e costela.', comboItems: ['Costela (meio)', 'Arroz', 'Farofa', 'Vinagrete', 'Mandioca'] }),
+  p({ id: 'combo-contra-file', categoryId: 'combos', name: 'Combo Contra Filé', price: 10990, description: 'Arroz, farofa, vinagrete, mandioca e contra filé.', comboItems: ['Contra filé', 'Arroz', 'Farofa', 'Vinagrete', 'Mandioca'] }),
+  p({ id: 'combo-picanha', categoryId: 'combos', name: 'Combo Picanha', price: 12190, featured: true, description: 'Arroz, farofa, vinagrete, mandioca e picanha.', comboItems: ['Picanha', 'Arroz', 'Farofa', 'Vinagrete', 'Mandioca'] }),
+  p({ id: 'combinho-x-costela', categoryId: 'combos', group: 'Combinho', comboItems: ['X-Costela', 'Batata frita', 'Refri lata'], name: 'X-Costela + Batata Frita + Refri Lata', orderName: 'Combinho X-Costela + Batata Frita + Refri Lata', price: 2990, options: REFRI_LATA, optionsLabel: 'Refri lata' }),
+  p({ id: 'combinho-x-costela-bacon', categoryId: 'combos', group: 'Combinho', comboItems: ['X-Costela com Bacon', 'Batata frita', 'Refri lata'], name: 'X-Costela com Bacon + Batata Frita + Refri Lata', orderName: 'Combinho X-Costela com Bacon + Batata Frita + Refri Lata', price: 3490, options: REFRI_LATA, optionsLabel: 'Refri lata' }),
+  p({ id: 'combinho-x-costela-salada', categoryId: 'combos', group: 'Combinho', comboItems: ['X-Costela Salada', 'Batata frita', 'Refri lata'], name: 'X-Costela Salada + Batata Frita + Refri Lata', orderName: 'Combinho X-Costela Salada + Batata Frita + Refri Lata', price: 3490, options: REFRI_LATA, optionsLabel: 'Refri lata' }),
+  p({ id: 'combinho-sanduiche-costela', categoryId: 'combos', group: 'Combinho', comboItems: ['Sanduíche de Costela', 'Batata frita', 'Refri lata'], name: 'Sanduíche de Costela + Batata Frita + Refri Lata', orderName: 'Combinho Sanduíche de Costela + Batata Frita + Refri Lata', price: 3490, options: REFRI_LATA, optionsLabel: 'Refri lata' }),
 
   // ——— Assados ———
-  p({ id: 'assado-costela', categoryId: 'assados', name: 'Costela', orderName: 'Costela Assada', price: 7490 }),
+  p({ id: 'assado-costela', featured: true, categoryId: 'assados', name: 'Costela', orderName: 'Costela Assada', price: 7490 }),
   p({ id: 'assado-costela-meia', categoryId: 'assados', name: 'Costela (meia)', orderName: 'Costela Assada (meia)', price: 4590 }),
   p({ id: 'assado-contra-file', categoryId: 'assados', name: 'Contra Filé', orderName: 'Contra Filé Assado', detail: '800g in natura', price: 7490 }),
-  p({ id: 'assado-picanha', categoryId: 'assados', name: 'Picanha', orderName: 'Picanha Assada', detail: '800g in natura', price: 8690 }),
+  p({ id: 'assado-picanha', featured: true, categoryId: 'assados', name: 'Picanha', orderName: 'Picanha Assada', detail: '800g in natura', price: 8690 }),
 
   // ——— Escondidinho ———
   p({ id: 'escondidinho-costela', categoryId: 'escondidinho', name: 'Costela', orderName: 'Escondidinho de Costela', price: 3990 }),
 
   // ——— Lanches ———
   p({ id: 'x-costela', categoryId: 'lanches', name: 'X-Costela', price: 1990, description: 'Pão, hambúrguer de costela, mussarela e molho especial.' }),
-  p({ id: 'x-costela-bacon', categoryId: 'lanches', name: 'X-Costela com Bacon', price: 2490, description: 'Pão, hambúrguer de costela, bacon, mussarela e molho especial.' }),
+  p({ id: 'x-costela-bacon', featured: true, categoryId: 'lanches', name: 'X-Costela com Bacon', price: 2490, description: 'Pão, hambúrguer de costela, bacon, mussarela e molho especial.' }),
   p({ id: 'x-costela-salada', categoryId: 'lanches', name: 'X-Costela Salada', price: 2490, description: 'Pão, hambúrguer de costela, rúcula, tomate, mussarela e molho especial.' }),
 
   // ——— Sanduíches ———

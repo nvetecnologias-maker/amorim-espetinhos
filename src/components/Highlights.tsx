@@ -8,7 +8,7 @@ import type { Product } from '@/types'
 import { ProductBadge } from './ui/badge'
 import { ProductImage } from './ProductImage'
 
-/** Carrossel com os produtos marcados como "destaque" no painel que tenham FOTO REAL. Sem nenhum, a seção não aparece. */
+/** Carrossel com os produtos marcados como "destaque" no painel. Sem foto, mostra a arte da marca. */
 export function Highlights({ onOpen }: { onOpen: (p: Product) => void }) {
   const products = useMenu((s) => s.products)
   const categories = useMenu((s) => s.categories)
@@ -16,7 +16,7 @@ export function Highlights({ onOpen }: { onOpen: (p: Product) => void }) {
   const toggleFavorite = useCart((s) => s.toggleFavorite)
   const addToCart = useAddToCart()
 
-  const featured = useMemo(() => products.filter((p) => p.featured && !!p.image).sort(sortByOrder), [products])
+  const featured = useMemo(() => products.filter((p) => p.featured).sort(sortByOrder), [products])
   const dishes: OrbitDish[] = useMemo(
     () =>
       featured.map((p) => {
@@ -40,11 +40,11 @@ export function Highlights({ onOpen }: { onOpen: (p: Product) => void }) {
 
   if (!dishes.length) return null
   return (
-    <section id="destaques" className="relative scroll-mt-20 bg-black border-t border-brasa/40 py-16 sm:py-24" aria-labelledby="destaques-title">
+    <section id="destaques" className="relative scroll-mt-20 bg-gradient-to-b from-profundo via-carvao to-profundo py-16 sm:py-24" aria-labelledby="destaques-title">
       <div className="container mb-6 sm:mb-10">
         <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-brasa">Destaques</span>
         <h2 id="destaques-title" className="mt-2 font-display text-[clamp(2.6rem,8vw,5.5rem)] font-extrabold uppercase leading-[0.85] tracking-tight">
-          Os favoritos <span className="text-brasa">da casa</span>
+          Os destaques <span className="font-light">da casa</span>
         </h2>
         <p className="mt-3 text-sm text-bege/50">Deslize, use as setas ou toque nas miniaturas.</p>
       </div>
@@ -53,7 +53,7 @@ export function Highlights({ onOpen }: { onOpen: (p: Product) => void }) {
         label="Destaques da casa"
         renderImage={(d, variant) => {
           const p = byId(d.id)
-          return <ProductImage image={p.image} alt={p.name} eager={variant === 'main'} className="h-full w-full" imgClassName={variant === 'main' ? 'rounded-full' : ''} />
+          return <ProductImage image={p.image} categoryId={p.categoryId} round={variant === 'main'} alt={p.name} eager={variant === 'main'} className="h-full w-full" imgClassName={variant === 'main' ? 'rounded-full' : ''} />
         }}
         onOrder={(d, el) => { const p = byId(d.id); if ((p.options?.length ?? 0) > 1) onOpen(p); else addToCart(p, el) }}
         onOpenDetails={(d) => onOpen(byId(d.id))}
