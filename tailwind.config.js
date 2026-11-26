@@ -28,8 +28,8 @@ export default {
       },
       fontFamily: {
         brand: ['"Russo One"', 'Impact', 'sans-serif'],
-        display: ['"Open Sans"', 'system-ui', 'sans-serif'],
-        sans: ['"Open Sans"', 'system-ui', 'sans-serif'],
+        display: ['"Barlow Condensed"', 'Impact', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       borderRadius: { lg: 'var(--radius)', md: 'calc(var(--radius) - 4px)', sm: 'calc(var(--radius) - 8px)' },
       boxShadow: {

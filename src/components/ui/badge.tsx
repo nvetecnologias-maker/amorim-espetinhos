@@ -3,10 +3,10 @@ import { cn } from '@/lib/utils'
 import type { BadgeId } from '@/types'
 
 export const BADGES: Record<BadgeId, { label: string; icon: typeof Flame; cls: string }> = {
-  'mais-vendido': { label: 'Mais vendido', icon: Flame, cls: 'bg-brasa text-black' },
+  'mais-vendido': { label: 'Mais vendido', icon: Flame, cls: 'bg-gradient-to-r from-queimado to-brasa text-white' },
   novidade: { label: 'Novidade', icon: Sparkles, cls: 'bg-bege text-profundo' },
   favorito: { label: 'Favorito da casa', icon: Heart, cls: 'bg-white/10 text-bege border border-white/20 backdrop-blur' },
-  'mais-pedido': { label: 'Mais pedido', icon: Trophy, cls: 'bg-brasa text-black' },
+  'mais-pedido': { label: 'Mais pedido', icon: Trophy, cls: 'bg-gradient-to-r from-queimado to-brasa text-white' },
   economize: { label: 'Economize', icon: PiggyBank, cls: 'bg-[#1f3a1a] text-[#b9f09a] border border-[#b9f09a]/30' },
 }
 

@@ -2,7 +2,7 @@ export type BadgeId = 'mais-vendido' | 'novidade' | 'favorito' | 'mais-pedido' |
 
 
 /** Como a categoria é apresentada no cardápio. */
-export type CategoryLayout = 'list' | 'grid'
+export type CategoryLayout = 'grid' | 'compact' | 'large' | 'combo' | 'drinks'
 
 /** Qual conjunto de observações rápidas o modal oferece. */
 export type NotesPreset = 'carne' | 'lanche' | 'porcao' | 'bebida' | 'nenhum'
