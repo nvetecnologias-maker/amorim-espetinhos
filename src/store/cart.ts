@@ -32,7 +32,7 @@ export const useCart = create<CartState>()(
           const existing = s.items.find((i) => sameLine(i, p.id, notes, customNote))
           if (existing) return { items: s.items.map((i) => (i === existing ? { ...i, qty: i.qty + qty } : i)) }
           return {
-            items: [...s.items, { lineId: uid(), productId: p.id, name: p.name, categoryId: p.categoryId, unitPrice: p.price, qty, notes, customNote }],
+            items: [...s.items, { lineId: uid(), productId: p.id, name: p.orderName || p.name, categoryId: p.categoryId, unitPrice: p.price, qty, notes, customNote }],
           }
         }),
       setQty: (lineId, qty) =>
@@ -46,7 +46,7 @@ export const useCart = create<CartState>()(
       clear: () => set({ items: [] }),
       toggleFavorite: (id) => set((s) => ({ favorites: s.favorites.includes(id) ? s.favorites.filter((f) => f !== id) : [...s.favorites, id] })),
     }),
-    { name: 'amorim:cart:v1', partialize: (s) => ({ items: s.items, favorites: s.favorites }) },
+    { name: 'pontodacostela:cart:v1', partialize: (s) => ({ items: s.items, favorites: s.favorites }) },
   ),
 )
 

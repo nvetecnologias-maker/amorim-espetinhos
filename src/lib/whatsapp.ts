@@ -5,7 +5,7 @@ export const PAYMENT_LABEL = { pix: 'Pix', dinheiro: 'Dinheiro', credito: 'Cart�
 
 export function orderMessage(order: Order, settings: Settings) {
   const L: string[] = []
-  L.push(`🔥 *NOVO PEDIDO — ${settings.storeName.toUpperCase()}*`)
+  L.push(`*NOVO PEDIDO — ${settings.storeName.toUpperCase()}*`)
   L.push(`Pedido *#${order.code}*`)
   L.push('')
   L.push('*ITENS*')
@@ -16,8 +16,8 @@ export function orderMessage(order: Order, settings: Settings) {
   }
   L.push('')
   L.push(`Subtotal: ${money(order.subtotal)}`)
-  L.push(`Taxa de entrega: ${order.type === 'entrega' ? money(order.deliveryFee) : 'Retirada (sem taxa)'}`)
-  L.push(`*TOTAL: ${money(order.total)}*`)
+  L.push(`Taxa de entrega: ${order.type === 'entrega' ? (order.deliveryFeePending ? 'a combinar' : money(order.deliveryFee)) : 'Retirada (sem taxa)'}`)
+  L.push(order.deliveryFeePending ? `*TOTAL: ${money(order.total)} + entrega*` : `*TOTAL: ${money(order.total)}*`)
   L.push('')
   L.push('*CLIENTE*')
   L.push(`${order.customerName} — ${order.customerPhone}`)

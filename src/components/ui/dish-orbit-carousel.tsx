@@ -4,12 +4,12 @@ import { useCallback, useLayoutEffect, useRef, useState, type ReactNode } from '
 import { cn, prefersReducedMotion } from '@/lib/utils'
 
 /**
- * Dish Orbit Carousel — adaptado para espetinhos.
+ * Dish Orbit Carousel — destaques do cardápio (só produtos com foto real).
  *
  * Mapeamento do componente original:
- *  - Dish        → espetinho (OrbitDish)
+ *  - Dish        → produto em destaque (OrbitDish)
  *  - Chef        → removido (a marca já aparece no cabeçalho)
- *  - Ingredients → composição do espeto
+ *  - Ingredients → composição do prato
  *  - Rating      → removido: não exibimos avaliações sem dados reais
  *  - Likes       → favoritos do próprio cliente (salvos no aparelho)
  *  - Order       → adicionar ao pedido
@@ -240,7 +240,7 @@ export function DishOrbitCarousel({ dishes, renderImage, onOrder, onOpenDetails,
               disabled={dish.available === false}
               onClick={(e) => onOrder(dish, e.currentTarget)}
               className="group inline-flex h-14 items-center gap-2 rounded-full px-7 text-sm font-bold uppercase tracking-[0.14em] text-white shadow-ember transition hover:-translate-y-0.5 hover:brightness-110 active:scale-95 disabled:opacity-40"
-              style={{ background: 'linear-gradient(90deg, #B83A24, var(--accent))' }}
+              style={{ background: 'linear-gradient(90deg, #D9600F, var(--accent))' }}
             >
               <Plus className="h-5 w-5 transition-transform group-hover:rotate-90" />
               {dish.available === false ? 'Indisponível' : 'Adicionar ao pedido'}
@@ -273,7 +273,7 @@ export function DishOrbitCarousel({ dishes, renderImage, onOrder, onOpenDetails,
 
       {/* miniaturas */}
       <div className="container mt-8">
-        <div ref={thumbs} className="no-scrollbar -mx-4 flex snap-x gap-3 overflow-x-auto px-4 py-3" role="tablist" aria-label="Escolher espetinho">
+        <div ref={thumbs} className="no-scrollbar -mx-4 flex snap-x gap-3 overflow-x-auto px-4 py-3" role="tablist" aria-label="Escolher destaque">
           {dishes.map((d, i) => (
             <div key={d.id} data-thumb={i} className="snap-center">
               <button

@@ -12,7 +12,7 @@ import { DialogDescription, DialogTitle } from './ui/dialog'
 import { Input, Textarea } from './ui/input'
 import { Label } from './ui/label'
 
-const SAVED = 'amorim:customer:v1'
+const SAVED = 'pontodacostela:customer:v1'
 interface Form {
   name: string
   phone: string
@@ -56,7 +56,8 @@ export function Checkout({ onBack, onFinished }: { onBack: () => void; onFinishe
   })
 
   const subtotal = cartSubtotal(items)
-  const fee = f.type === 'entrega' ? settings.deliveryFee : 0
+  const feePending = f.type === 'entrega' && settings.deliveryFee === null
+  const fee = f.type === 'entrega' ? settings.deliveryFee ?? 0 : 0
   const total = subtotal + fee
   const open = isOpenNow(settings)
 
@@ -101,6 +102,7 @@ export function Checkout({ onBack, onFinished }: { onBack: () => void; onFinishe
       items,
       subtotal,
       deliveryFee: fee,
+      deliveryFeePending: feePending,
       total,
       status: 'novo',
     }
@@ -127,7 +129,7 @@ export function Checkout({ onBack, onFinished }: { onBack: () => void; onFinishe
         <CheckCircle2 className="h-16 w-16 text-[#7be08a]" />
         <DialogTitle className="mt-5 font-display text-4xl font-extrabold uppercase">Pedido gerado!</DialogTitle>
         <DialogDescription className="mt-2 max-w-xs text-bege/65">
-          Pedido <strong className="text-bege">#{placed.order.code}</strong> · {money(placed.order.total)}. Envie a mensagem no WhatsApp para a espetaria confirmar.
+          Pedido <strong className="text-bege">#{placed.order.code}</strong> · {money(placed.order.total)}. Envie a mensagem no WhatsApp para o Ponto da Costela confirmar.
         </DialogDescription>
         {sendError && <p className="mt-3 text-xs text-[#ff9a80]">Não foi possível registrar no painel ({sendError}), mas o pedido segue pelo WhatsApp.</p>}
         <Button size="lg" className="mt-7 w-full max-w-xs bg-none bg-[#25D366] text-profundo hover:bg-[#2fe076]" asChild>
@@ -170,7 +172,7 @@ export function Checkout({ onBack, onFinished }: { onBack: () => void; onFinishe
             <fieldset>
               <legend className="mb-3 font-display text-xl font-bold uppercase text-brasa">Entrega ou retirada?</legend>
               <div className="grid grid-cols-2 gap-2">
-                {([['entrega', Bike, `Entrega · ${settings.deliveryEstimate}`], ['retirada', Store, `Retirada · ${settings.pickupEstimate}`]] as const).map(([id, Icon, sub]) => (
+                {([['entrega', Bike, settings.deliveryEstimate ? `Entrega · ${settings.deliveryEstimate}` : 'Entrega'], ['retirada', Store, settings.pickupEstimate ? `Retirada · ${settings.pickupEstimate}` : 'Retirada no local']] as const).map(([id, Icon, sub]) => (
                   <button key={id} type="button" onClick={() => set('type', id)} aria-pressed={f.type === id}
                     className={cn('flex flex-col items-start gap-1 rounded-2xl border p-4 text-left transition', f.type === id ? 'border-brasa bg-brasa/10' : 'border-white/10 hover:border-white/25')}>
                     <Icon className={cn('h-5 w-5', f.type === id ? 'text-brasa' : 'text-bege/50')} />
@@ -217,7 +219,7 @@ export function Checkout({ onBack, onFinished }: { onBack: () => void; onFinishe
               {f.payment === 'dinheiro' && (
                 <div className="mt-4 space-y-3 rounded-2xl border border-white/10 p-4">
                   <label className="flex items-center gap-3 text-sm">
-                    <input type="checkbox" className="h-5 w-5 accent-[#F07832]" checked={f.needChange} onChange={(e) => set('needChange', e.target.checked)} />
+                    <input type="checkbox" className="h-5 w-5 accent-[#F47A20]" checked={f.needChange} onChange={(e) => set('needChange', e.target.checked)} />
                     Preciso de troco
                   </label>
                   {f.needChange && (
@@ -227,7 +229,7 @@ export function Checkout({ onBack, onFinished }: { onBack: () => void; onFinishe
                   )}
                 </div>
               )}
-              {f.payment === 'pix' && <p className="mt-2 text-xs text-bege/50">A chave Pix é enviada pela espetaria no WhatsApp ao confirmar o pedido.</p>}
+              {f.payment === 'pix' && <p className="mt-2 text-xs text-bege/50">A chave Pix é enviada pelo Ponto da Costela no WhatsApp ao confirmar o pedido.</p>}
             </fieldset>
 
             <Field label="Observações gerais">
@@ -235,13 +237,13 @@ export function Checkout({ onBack, onFinished }: { onBack: () => void; onFinishe
             </Field>
           </div>
         ) : (
-          <Review f={f} subtotal={subtotal} fee={fee} total={total} />
+          <Review f={f} subtotal={subtotal} fee={fee} feePending={feePending} total={total} />
         )}
       </div>
 
       <div className="pb-safe border-t border-white/10 px-5 pt-4">
         <div className="mb-3 flex items-baseline justify-between">
-          <span className="text-sm text-bege/60">Total {f.type === 'retirada' && '(sem taxa)'}</span>
+          <span className="text-sm text-bege/60">Total {f.type === 'retirada' ? '(sem taxa)' : feePending ? '+ entrega (a combinar)' : ''}</span>
           <span className="font-display text-3xl font-bold tabular-nums">{money(total)}</span>
         </div>
         {step === 'form' ? (
@@ -266,7 +268,7 @@ function Field({ label, error, children }: { label: string; error?: string; chil
   )
 }
 
-function Review({ f, subtotal, fee, total }: { f: Form; subtotal: number; fee: number; total: number }) {
+function Review({ f, subtotal, fee, feePending, total }: { f: Form; subtotal: number; fee: number; feePending: boolean; total: number }) {
   const items = useCart((s) => s.items)
   const a = f.address
   return (
@@ -286,8 +288,8 @@ function Review({ f, subtotal, fee, total }: { f: Form; subtotal: number; fee: n
         </ul>
         <dl className="mt-4 space-y-1 border-t border-white/10 pt-3 text-bege/70">
           <div className="flex justify-between"><dt>Subtotal</dt><dd>{money(subtotal)}</dd></div>
-          <div className="flex justify-between"><dt>Taxa de entrega</dt><dd>{f.type === 'entrega' ? money(fee) : 'Grátis (retirada)'}</dd></div>
-          <div className="flex justify-between text-base font-bold text-bege"><dt>Total</dt><dd>{money(total)}</dd></div>
+          <div className="flex justify-between"><dt>Taxa de entrega</dt><dd>{f.type === 'entrega' ? (feePending ? 'A combinar' : money(fee)) : 'Grátis (retirada)'}</dd></div>
+          <div className="flex justify-between text-base font-bold text-bege"><dt>Total{feePending && ' + entrega'}</dt><dd>{money(total)}</dd></div>
         </dl>
       </section>
       <section className="rounded-2xl border border-white/10 p-4">
@@ -299,7 +301,7 @@ function Review({ f, subtotal, fee, total }: { f: Form; subtotal: number; fee: n
         {f.type === 'entrega' ? (
           <p>{a.street}, {a.number}{a.complement && ` — ${a.complement}`}<br />{a.district}{a.reference && <><br /><span className="text-bege/55">Ref.: {a.reference}</span></>}</p>
         ) : (
-          <p className="text-bege/70">Retire no balcão da espetaria.</p>
+          <p className="text-bege/70">Retire no balcão do Ponto da Costela.</p>
         )}
       </section>
       <section className="rounded-2xl border border-white/10 p-4">
@@ -307,7 +309,7 @@ function Review({ f, subtotal, fee, total }: { f: Form; subtotal: number; fee: n
         <p>{PAYMENT_LABEL[f.payment]}{f.payment === 'dinheiro' && (f.needChange ? ` · troco para ${money(parseMoney(f.changeFor))}` : ' · sem troco')}</p>
         {f.notes && <p className="mt-2 text-bege/60">Obs.: {f.notes}</p>}
       </section>
-      <p className="text-xs text-bege/45">Ao confirmar, o pedido é registrado e o WhatsApp abre com a mensagem pronta para a espetaria.</p>
+      <p className="text-xs text-bege/45">Ao confirmar, o pedido é registrado e o WhatsApp abre com a mensagem pronta para o Ponto da Costela.</p>
     </div>
   )
 }

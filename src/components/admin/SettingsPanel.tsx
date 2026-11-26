@@ -16,7 +16,7 @@ export function SettingsPanel() {
   const [s, setS] = useState<Settings>(settings)
   const [fee, setFee] = useState('')
   const [msg, setMsg] = useState('')
-  useEffect(() => { setS(settings); setFee((settings.deliveryFee / 100).toFixed(2).replace('.', ',')) }, [settings])
+  useEffect(() => { setS(settings); setFee(settings.deliveryFee === null ? '' : (settings.deliveryFee / 100).toFixed(2).replace('.', ',')) }, [settings])
 
   const set = <K extends keyof Settings>(k: K, v: Settings[K]) => setS((x) => ({ ...x, [k]: v }))
   const setDay = (day: number, patch: Partial<Settings['hours'][number]>) => set('hours', s.hours.map((h) => (h.day === day ? { ...h, ...patch } : h)))
@@ -25,7 +25,7 @@ export function SettingsPanel() {
     e.preventDefault()
     setMsg('')
     try {
-      await repo.saveSettings({ ...s, whatsapp: onlyDigits(s.whatsapp), deliveryFee: parseMoney(fee) })
+      await repo.saveSettings({ ...s, whatsapp: onlyDigits(s.whatsapp), deliveryFee: fee.trim() ? parseMoney(fee) : null })
       setMsg('Configurações salvas. O cardápio já foi atualizado.')
     } catch (err) {
       setMsg((err as Error).message)
@@ -40,18 +40,20 @@ export function SettingsPanel() {
       </div>
 
       <section className="grid gap-4 rounded-3xl border border-white/[0.07] bg-carvao p-5 md:grid-cols-2">
-        <h3 className="font-display text-2xl font-bold uppercase text-brasa md:col-span-2">Espetaria</h3>
+        <h3 className="font-display text-2xl font-bold uppercase text-brasa md:col-span-2">Estabelecimento</h3>
         <div><Label>Nome</Label><Input value={s.storeName} onChange={(e) => set('storeName', e.target.value)} /></div>
         <div><Label>WhatsApp que recebe os pedidos (com DDI e DDD)</Label><Input value={s.whatsapp} onChange={(e) => set('whatsapp', e.target.value)} placeholder="5511999999999" inputMode="tel" /></div>
         <div><Label>Telefone exibido</Label><Input value={s.phone} onChange={(e) => set('phone', e.target.value)} /></div>
         <div><Label>Instagram (sem @)</Label><Input value={s.instagram} onChange={(e) => set('instagram', e.target.value)} /></div>
         <div><Label>Endereço</Label><Input value={s.address} onChange={(e) => set('address', e.target.value)} /></div>
         <div><Label>Cidade / UF</Label><Input value={s.city} onChange={(e) => set('city', e.target.value)} /></div>
+        <div><Label>Frase da primeira tela</Label><Input value={s.slogan} onChange={(e) => set('slogan', e.target.value)} /></div>
+        <div><Label>Aviso em destaque</Label><Input value={s.notice ?? ''} onChange={(e) => set('notice', e.target.value)} placeholder="Ex.: Servimos almoço aos sábados" /></div>
       </section>
 
       <section className="grid gap-4 rounded-3xl border border-white/[0.07] bg-carvao p-5 md:grid-cols-3">
         <h3 className="font-display text-2xl font-bold uppercase text-brasa md:col-span-3">Entrega</h3>
-        <div><Label>Taxa de entrega (R$)</Label><Input value={fee} onChange={(e) => setFee(e.target.value)} inputMode="decimal" /><p className="mt-1 text-xs text-bege/40">Atual: {money(settings.deliveryFee)}</p></div>
+        <div><Label>Taxa de entrega (R$)</Label><Input value={fee} onChange={(e) => setFee(e.target.value)} inputMode="decimal" placeholder="Vazio = a combinar" /><p className="mt-1 text-xs text-bege/40">Atual: {settings.deliveryFee === null ? 'a combinar pelo WhatsApp' : money(settings.deliveryFee)}</p></div>
         <div><Label>Tempo de entrega</Label><Input value={s.deliveryEstimate} onChange={(e) => set('deliveryEstimate', e.target.value)} /></div>
         <div><Label>Tempo de retirada</Label><Input value={s.pickupEstimate} onChange={(e) => set('pickupEstimate', e.target.value)} /></div>
       </section>
@@ -62,6 +64,7 @@ export function SettingsPanel() {
           <div className="w-full sm:w-64">
             <Label>Status no site</Label>
             <Select value={s.statusOverride} onChange={(e) => set('statusOverride', e.target.value as Settings['statusOverride'])}>
+              <option value="none">Não mostrar (horário não cadastrado)</option>
               <option value="auto">Automático (pelo horário)</option>
               <option value="open">Forçar “Aberto agora”</option>
               <option value="closed">Forçar “Fechado”</option>
@@ -91,10 +94,10 @@ export function SettingsPanel() {
       <section className="grid gap-4 rounded-3xl border border-white/[0.07] bg-carvao p-5 md:grid-cols-[200px_1fr] md:items-center">
         <h3 className="font-display text-2xl font-bold uppercase text-brasa md:col-span-2">Foto do destaque (hero)</h3>
         <div className="aspect-square overflow-hidden rounded-2xl bg-profundo">
-          {s.heroImage ? <img src={s.heroImage} alt="" className="h-full w-full object-cover" /> : <p className="grid h-full place-items-center p-4 text-center text-xs text-bege/40">Usando a ilustração do espeto de carne</p>}
+          {s.heroImage ? <img src={s.heroImage} alt="" className="h-full w-full object-cover" /> : <p className="grid h-full place-items-center p-4 text-center text-xs text-bege/40">Sem foto: a primeira tela mostra só a marca</p>}
         </div>
         <div className="space-y-3">
-          <p className="text-sm text-bege/60">Envie uma foto real do espetinho de carne (fundo escuro, luz quente). Ela aparece em destaque na primeira tela.</p>
+          <p className="text-sm text-bege/60">Opcional: envie uma foto REAL da costela ou do salão. Ela aparece ao fundo, escurecida, na primeira tela.</p>
           <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border border-white/15 px-5 text-sm font-semibold hover:bg-white/5">
             <ImagePlus className="h-4 w-4" /> Enviar foto
             <input type="file" accept="image/*" className="sr-only" onChange={async (e) => { const f = e.target.files?.[0]; if (f) set('heroImage', await fileToDataUrl(f, 1400)) }} />
@@ -106,8 +109,8 @@ export function SettingsPanel() {
       <div className="sticky bottom-4 flex flex-wrap items-center justify-end gap-3 rounded-full border border-white/10 bg-carvao/90 p-2 pl-5 backdrop-blur">
         {msg && <p className="mr-auto text-sm text-bege/70" role="status">{msg}</p>}
         {repo.resetDemo && (
-          <Button type="button" variant="ghost" size="sm" onClick={async () => { if (confirm('Restaurar o cardápio demonstrativo? Isso substitui produtos e categorias.')) { await repo.resetDemo!(); setMsg('Cardápio demonstrativo restaurado.') } }}>
-            Restaurar demonstração
+          <Button type="button" variant="ghost" size="sm" onClick={async () => { if (confirm('Restaurar o cardápio original do Ponto da Costela? Isso substitui produtos e categorias.')) { await repo.resetDemo!(); setMsg('Cardápio original restaurado.') } }}>
+            Restaurar cardápio original
           </Button>
         )}
         <Button type="submit">Salvar configurações</Button>

@@ -7,11 +7,12 @@ export default {
     container: { center: true, padding: '1rem', screens: { '2xl': '1280px' } },
     extend: {
       colors: {
+        // Paleta do Ponto da Costela: preto, laranja intenso e branco.
         carvao: '#141414',
-        profundo: '#0B0B0B',
-        queimado: '#B83A24',
-        brasa: '#F07832',
-        bege: '#F3E9D8',
+        profundo: '#0A0A0A',
+        queimado: '#D9600F',
+        brasa: '#F47A20',
+        bege: '#FFFFFF',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -26,12 +27,13 @@ export default {
         popover: { DEFAULT: 'hsl(var(--popover))', foreground: 'hsl(var(--popover-foreground))' },
       },
       fontFamily: {
-        display: ['"Barlow Condensed"', 'Impact', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        brand: ['"Russo One"', 'Impact', 'sans-serif'],
+        display: ['"Open Sans"', 'system-ui', 'sans-serif'],
+        sans: ['"Open Sans"', 'system-ui', 'sans-serif'],
       },
       borderRadius: { lg: 'var(--radius)', md: 'calc(var(--radius) - 4px)', sm: 'calc(var(--radius) - 8px)' },
       boxShadow: {
-        ember: '0 20px 60px -20px rgba(240,120,50,.45)',
+        ember: '0 16px 40px -18px rgba(244,122,32,.55)',
         deep: '0 30px 80px -30px rgba(0,0,0,.9)',
       },
     },

@@ -8,7 +8,7 @@ import type { Product } from '@/types'
 import { ProductBadge } from './ui/badge'
 import { ProductImage } from './ProductImage'
 
-/** Carrossel de destaque com os espetinhos marcados como "destaque" no painel. */
+/** Carrossel com os produtos marcados como "destaque" no painel que tenham FOTO REAL. Sem nenhum, a seção não aparece. */
 export function Highlights({ onOpen }: { onOpen: (p: Product) => void }) {
   const products = useMenu((s) => s.products)
   const categories = useMenu((s) => s.categories)
@@ -16,7 +16,7 @@ export function Highlights({ onOpen }: { onOpen: (p: Product) => void }) {
   const toggleFavorite = useCart((s) => s.toggleFavorite)
   const addToCart = useAddToCart()
 
-  const featured = useMemo(() => products.filter((p) => p.featured).sort(sortByOrder), [products])
+  const featured = useMemo(() => products.filter((p) => p.featured && !!p.image).sort(sortByOrder), [products])
   const dishes: OrbitDish[] = useMemo(
     () =>
       featured.map((p) => {
@@ -28,7 +28,7 @@ export function Highlights({ onOpen }: { onOpen: (p: Product) => void }) {
           description: p.description,
           price: money(p.price),
           ingredients: p.ingredients,
-          accent: c?.accent ?? '#F07832',
+          accent: c?.accent ?? '#F47A20',
           categoryLabel: c?.name,
           badge: p.badges[0] ? <ProductBadge id={p.badges[0]} /> : undefined,
           available: p.available,
@@ -40,22 +40,22 @@ export function Highlights({ onOpen }: { onOpen: (p: Product) => void }) {
 
   if (!dishes.length) return null
   return (
-    <section id="destaques" className="relative scroll-mt-20 bg-gradient-to-b from-profundo via-carvao to-profundo py-16 sm:py-24" aria-labelledby="destaques-title">
+    <section id="destaques" className="relative scroll-mt-20 bg-black border-t border-brasa/40 py-16 sm:py-24" aria-labelledby="destaques-title">
       <div className="container mb-6 sm:mb-10">
-        <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-brasa">Direto da churrasqueira</span>
+        <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-brasa">Destaques</span>
         <h2 id="destaques-title" className="mt-2 font-display text-[clamp(2.6rem,8vw,5.5rem)] font-extrabold uppercase leading-[0.85] tracking-tight">
-          Os espetos <span className="font-light">da casa</span>
+          Os favoritos <span className="text-brasa">da casa</span>
         </h2>
         <p className="mt-3 text-sm text-bege/50">Deslize, use as setas ou toque nas miniaturas.</p>
       </div>
       <DishOrbitCarousel
         dishes={dishes}
-        label="Espetinhos em destaque"
+        label="Destaques da casa"
         renderImage={(d, variant) => {
           const p = byId(d.id)
-          return <ProductImage image={p.image} art={p.art} alt={p.name} eager={variant === 'main'} className="h-full w-full" imgClassName={p.image ? (variant === 'main' ? 'rounded-full' : '') : variant === 'thumb' ? 'scale-[1.6]' : ''} />
+          return <ProductImage image={p.image} alt={p.name} eager={variant === 'main'} className="h-full w-full" imgClassName={variant === 'main' ? 'rounded-full' : ''} />
         }}
-        onOrder={(d, el) => addToCart(byId(d.id), el)}
+        onOrder={(d, el) => { const p = byId(d.id); if ((p.options?.length ?? 0) > 1) onOpen(p); else addToCart(p, el) }}
         onOpenDetails={(d) => onOpen(byId(d.id))}
         isLiked={(id) => favorites.includes(id)}
         onToggleLike={toggleFavorite}

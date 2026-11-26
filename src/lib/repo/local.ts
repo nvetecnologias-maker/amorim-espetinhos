@@ -8,13 +8,13 @@ import type { Repository } from './types'
  * abertas no MESMO navegador. Para uso real (cliente pedindo do celular e
  * pedido chegando no painel do dono), configure o Supabase — veja README.
  */
-const MENU_KEY = 'amorim:menu:v2'
-const ORDERS_KEY = 'amorim:orders:v1'
-const SESSION_KEY = 'amorim:admin-session'
+const MENU_KEY = 'pontodacostela:menu:v1'
+const ORDERS_KEY = 'pontodacostela:orders:v1'
+const SESSION_KEY = 'pontodacostela:admin-session'
 // PIN de demonstração. Não é segurança real: no modo local tudo roda no navegador.
 const DEMO_PIN = import.meta.env.VITE_ADMIN_PIN || '1234'
 
-const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('amorim') : null
+const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('pontodacostela') : null
 
 function read<T>(key: string, fallback: T): T {
   try {

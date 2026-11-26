@@ -11,7 +11,7 @@ export function flyToCart(from: HTMLElement | null) {
   const a = from.getBoundingClientRect()
   const b = target.getBoundingClientRect()
   const dot = document.createElement('div')
-  dot.style.cssText = `position:fixed;z-index:100;left:${a.left + a.width / 2 - 9}px;top:${a.top + a.height / 2 - 9}px;width:18px;height:18px;border-radius:999px;background:radial-gradient(circle at 35% 35%,#ffd2a0,#F07832 45%,#B83A24);box-shadow:0 0 18px 4px rgba(240,120,50,.7);pointer-events:none`
+  dot.style.cssText = `position:fixed;z-index:100;left:${a.left + a.width / 2 - 9}px;top:${a.top + a.height / 2 - 9}px;width:18px;height:18px;border-radius:999px;background:radial-gradient(circle at 35% 35%,#ffd2a0,#F47A20 45%,#D9600F);box-shadow:0 0 18px 4px rgba(244,122,32,.7);pointer-events:none`
   document.body.appendChild(dot)
   const dx = b.left + b.width / 2 - (a.left + a.width / 2)
   const dy = b.top + b.height / 2 - (a.top + a.height / 2)

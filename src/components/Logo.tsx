@@ -1,31 +1,29 @@
-import { useState } from 'react'
 import { BRAND_LOGO_SRC, BRAND_NAME } from '@/lib/brand'
 import { cn } from '@/lib/utils'
 
 /**
- * Exibe a logo OFICIAL (arquivo original em public/brand/logo.png) sem cortar
- * nem esticar (object-contain). Enquanto o arquivo não existir, mostra um
- * espaço reservado claramente identificado — não é uma logo.
+ * Letreiro do Ponto da Costela, como nas artes oficiais do cardápio:
+ * linha dupla laranja, "★ PONTO DA ★", "COSTELA" e linha dupla laranja.
+ * Tamanho controlado pelo font-size do container (use classes text-*).
  */
-export function Logo({ className, showName = false }: { className?: string; showName?: boolean }) {
-  const [missing, setMissing] = useState(false)
+export function Wordmark({ className, compact = false }: { className?: string; compact?: boolean }) {
+  if (BRAND_LOGO_SRC) return <img src={BRAND_LOGO_SRC} alt={BRAND_NAME} className={cn('object-contain', className)} draggable={false} />
   return (
-    <span className="inline-flex items-center gap-3">
-      {missing ? (
-        <span
-          className={cn('grid aspect-square shrink-0 place-items-center rounded-full border border-dashed border-bege/40 bg-white/[0.03] text-center font-sans text-[9px] font-semibold uppercase leading-tight tracking-wider text-bege/50', className)}
-          title="Espaço reservado: envie a logo oficial (public/brand/logo.png)"
-        >
-          logo
-        </span>
-      ) : (
-        <img src={BRAND_LOGO_SRC} alt={BRAND_NAME} onError={() => setMissing(true)} className={cn('shrink-0 object-contain', className)} draggable={false} />
-      )}
-      {showName && (
-        <span className="font-display text-lg font-bold uppercase leading-none tracking-[0.08em] text-bege">
-          Amorim <span className="block text-[0.7em] font-medium tracking-[0.32em] text-brasa">Espetinhos</span>
-        </span>
-      )}
+    <span role="img" aria-label={BRAND_NAME} className={cn('inline-flex flex-col items-stretch font-brand uppercase leading-none text-white', className)}>
+      {!compact && <span className="rule-double mb-[0.16em] block" style={{ height: '0.2em', backgroundSize: '100% 100%' }} aria-hidden />}
+      <span className="flex items-center justify-center gap-[0.22em] text-[0.62em] tracking-[0.01em]">
+        <Star /> Ponto da <Star />
+      </span>
+      <span className="-mt-[0.02em] block text-center text-[1em] tracking-[0.005em]">Costela</span>
+      {!compact && <span className="rule-double mt-[0.12em] block" style={{ height: '0.2em' }} aria-hidden />}
     </span>
+  )
+}
+
+function Star() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-[0.55em] w-[0.55em] fill-current" aria-hidden>
+      <path d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.7L12 17.6l-6 3.3 1.3-6.7-5-4.7 6.8-.8z" />
+    </svg>
   )
 }

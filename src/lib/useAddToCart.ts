@@ -12,7 +12,7 @@ export function useAddToCart() {
       if (!p.available) return
       add(p, qty, notes, customNote)
       flyToCart(trigger ?? null)
-      push(`${qty}x ${p.name} adicionado ao pedido`)
+      push(`${qty}x ${p.orderName || p.name} adicionado ao pedido`)
     },
     [add, push],
   )
